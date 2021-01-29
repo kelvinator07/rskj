@@ -393,11 +393,10 @@ public class TxPoolModuleImplTest {
     }
 
     private void assertSummaryTransaction(Transaction tx, JsonNode summaryNode) {
-        String summary = "{}: {} wei + {} x {} gas";
-        String summaryFormatted = String.format(summary,
+        String summaryFormatted = String.format("%s: %s wei + %d x %s gas",
                 tx.getReceiveAddress().toString(),
                 tx.getValue().toString(),
-                tx.getGasLimitAsInteger().toString(),
+                tx.getGasLimitAsInteger(),
                 tx.getGasPrice().toString());
 
         Assert.assertEquals(summaryFormatted, summaryNode.asText());
