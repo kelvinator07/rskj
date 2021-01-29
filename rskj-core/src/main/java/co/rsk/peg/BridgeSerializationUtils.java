@@ -726,7 +726,7 @@ public class BridgeSerializationUtils {
         RLPList rlpList = (RLPList)RLP.decode2(data).get(0);
 
         if (rlpList.size() != 1) {
-            throw new RuntimeException(String.format("Invalid serialized coinbase information, expected 1 value but got %n", rlpList.size()));
+            throw new RuntimeException(String.format("Invalid serialized coinbase information, expected 1 value but got %d", rlpList.size()));
         }
 
         Sha256Hash witnessMerkleRoot = Sha256Hash.wrap(rlpList.get(0).getRLPData());
