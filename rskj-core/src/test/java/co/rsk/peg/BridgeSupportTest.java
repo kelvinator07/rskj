@@ -75,6 +75,7 @@ import co.rsk.peg.simples.SimpleRskTransaction;
 import co.rsk.peg.utils.*;
 import co.rsk.peg.whitelist.LockWhitelist;
 import co.rsk.peg.whitelist.OneOffWhiteListEntry;
+import co.rsk.test.builders.BridgeSupportBuilder;
 import co.rsk.trie.Trie;
 import com.google.common.collect.Lists;
 import java.io.IOException;
@@ -138,6 +139,7 @@ public class BridgeSupportTest {
     private NetworkParameters btcParams;
     private ActivationConfig.ForBlock activationsBeforeForks;
     private ActivationConfig.ForBlock activationsAfterForks;
+    private BridgeSupportBuilder bridgeSupportBuilder;
 
     @Before
     public void setUpOnEachTest() {
@@ -145,6 +147,7 @@ public class BridgeSupportTest {
         btcParams = bridgeConstants.getBtcParams();
         activationsBeforeForks = ActivationConfigsForTest.genesis().forBlock(0);
         activationsAfterForks = ActivationConfigsForTest.all().forBlock(0);
+        bridgeSupportBuilder = new BridgeSupportBuilder();
     }
 
     @Test
@@ -181,7 +184,10 @@ public class BridgeSupportTest {
         when(authorizer.isAuthorized(tx))
                 .thenReturn(true);
 
-        BridgeSupport bridgeSupport = getBridgeSupport(constants, provider);
+        BridgeSupport bridgeSupport = bridgeSupportBuilder
+            .bridgeConstants(constants)
+            .provider(provider)
+            .build();
 
         bridgeSupport.voteFeePerKbChange(tx, null);
         verify(provider, never()).setFeePerKb(any());
@@ -7755,9 +7761,9 @@ public class BridgeSupportTest {
         return pk;
     }
 
-    private BridgeSupport getBridgeSupport(BridgeConstants constants, BridgeStorageProvider provider) {
-        return getBridgeSupport(constants, provider, null, mock(BridgeEventLogger.class), null, null, null);
-    }
+//    private BridgeSupport getBridgeSupport(BridgeConstants constants, BridgeStorageProvider provider) {
+//        return getBridgeSupport(constants, provider, null, mock(BridgeEventLogger.class), null, null, null);
+//    }
 
     private BridgeSupport getBridgeSupport(BridgeConstants constants, BridgeStorageProvider provider, ActivationConfig.ForBlock activations) {
         return getBridgeSupport(constants, provider, null, mock(BridgeEventLogger.class), null, null, activations);
